@@ -100,9 +100,7 @@ var Select2Component = Ember.Component.extend({
     'nextSearchTerm'
   ],
 
-
-  // internal state
-  _hasSelectedMissingItems: false,
+  // internal state  
   _hasPendingContentPromise: Ember.computed.alias('content.isPending'),
   _hasFailedContentPromise: Ember.computed.alias('content.isRejected'),
   _hasPendingValuePromise: Ember.computed.alias('value.isPending'),
@@ -400,17 +398,9 @@ var Select2Component = Ember.Component.extend({
       // END loop over content
 
       if (unmatchedValues === 0) {
-        self.set('_hasSelectedMissingItems', false);
-      } else {
-        // disable the select2 element if there are keys left in the values
-        // array that were not matched to an object
-        self.set('_hasSelectedMissingItems', true);
-
         Ember.warn("select2#initSelection was not able to map each \"" +
           optionValuePath +"\" to an object from \"content\". The remaining " +
-          "keys are: " + values + ". The input will be disabled until a) the " +
-          "desired objects is added to the \"content\" array or b) the " +
-          "\"value\" is changed.", !values.length);
+          "keys are: " + values + ".", !values.length);
       }
 
       if (multiple) {
@@ -564,7 +554,6 @@ var Select2Component = Ember.Component.extend({
    * Watch properties that determine the disabled state of the input.
    */
   watchDisabled: Ember.observer(
-    '_hasSelectedMissingItems',
     '_hasPendingContentPromise',
     '_hasFailedContentPromise',
     '_hasPendingValuePromise',
@@ -572,8 +561,7 @@ var Select2Component = Ember.Component.extend({
     'enabled',
     function() {
       var select = this._select,
-          disabled = this.get('_hasSelectedMissingItems') ||
-            this.get('_hasPendingContentPromise') ||
+          disabled = this.get('_hasPendingContentPromise') ||
             this.get('_hasFailedContentPromise') ||
             this.get('_hasPendingValuePromise') ||
             this.get('_hasFailedValuePromise') ||

@@ -237,7 +237,7 @@ test("uses tabindex", function(assert) {
 
 
 test("uses `valueSeparator`", function(assert) {
-  assert.expect(2);
+  assert.expect(1);
 
   component.setProperties({
     content: [
@@ -273,8 +273,7 @@ test("uses `valueSeparator`", function(assert) {
     assert.equal(component._select.val(), "first|second", "outputs correct raw value string");
 
     component.set("value", "second|thi,rd");
-
-    assert.equal(component.get('_hasSelectedMissingItems'), false, "accepts value string with custom separator");
+   
   });
 });
 
