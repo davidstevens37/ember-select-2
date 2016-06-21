@@ -213,7 +213,9 @@ define('dummy/controllers/examples', ['exports', 'ember'], function (exports, Em
       queryInfiniteScrollPizzas: function queryInfiniteScrollPizzas(query, deferred) {
         this.send("queryPizzas", query, deferred, true);
       }
-    } });
+    }
+
+  });
 
   exports['default'] = ExamplesController;
 
@@ -3721,9 +3723,11 @@ define('dummy/tests/unit/components/select-2-customize-test', ['ember', 'ember-q
     component.setProperties({
       content: [{
         id: "first",
-        text: "First" }, {
+        text: "First"
+      }, {
         id: "second",
-        text: "Second" }, {
+        text: "Second"
+      }, {
         id: "thi,rd",
         text: "Third"
       }],
@@ -3750,6 +3754,50 @@ define('dummy/tests/unit/components/select-2-customize-test', ['ember', 'ember-q
       component.set("value", "second|thi,rd");
 
       assert.equal(component.get("_hasSelectedMissingItems"), false, "accepts value string with custom separator");
+    });
+  });
+
+  ember_qunit.test("it uses maximumSelectionValue", function (assert) {
+
+    assert.expect(2);
+
+    component.setProperties({
+      content: [{
+        id: "first",
+        text: "First"
+      }, {
+        id: "second",
+        text: "Second"
+      }, {
+        id: "third",
+        text: "Third"
+      }],
+      multiple: true,
+      optionValuePath: "id",
+      maximumSelectionSize: "2"
+    });
+
+    this.render();
+
+    // open options by clicking on the element
+    click(".select2-choices");
+    // then select an option
+    click(".select2-results li:nth-child(1)", "body");
+
+    // open options by clicking on the element
+    click(".select2-choices");
+
+    andThen(function () {
+      assert.strictEqual($(".select2-selection-limit").length, 0, "allows adding more before limit is reached");
+    });
+
+    // and select another option
+    click(".select2-results li:nth-child(2)", "body");
+
+    click(".select2-choices");
+
+    andThen(function () {
+      assert.strictEqual($(".select2-selection-limit").length, 1, "prevents adding more when limit is reached");
     });
   });
 
@@ -5240,7 +5288,7 @@ catch(err) {
 if (runningTests) {
   require("dummy/tests/test-helper");
 } else {
-  require("dummy/app")["default"].create({"name":"ember-select-2","version":"1.3.0.12be6180"});
+  require("dummy/app")["default"].create({"name":"ember-select-2","version":"1.3.0.b7655be9"});
 }
 
 /* jshint ignore:end */
