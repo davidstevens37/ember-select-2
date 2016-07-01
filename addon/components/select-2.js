@@ -397,7 +397,7 @@ var Select2Component = Ember.Component.extend({
       }
       // END loop over content
 
-      if (unmatchedValues === 0) {
+      if (unmatchedValues > 0) {
         Ember.warn("select2#initSelection was not able to map each \"" +
           optionValuePath +"\" to an object from \"content\". The remaining " +
           "keys are: " + values + ".", !values.length);
